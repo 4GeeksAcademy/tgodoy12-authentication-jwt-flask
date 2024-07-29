@@ -43,6 +43,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			createAccount: async (email, password) => {
+				try {
+					let response = await fetch('https://opulent-pancake-9rxpj9pgq4jc7qgp-3001.app.github.dev/api/signup', {
+						method: 'POST',
+						headers: {
+							'content-type': 'application/json'
+						},
+						body: JSON.stringify({
+							'email': email,
+							'password': password
+						})
+					})
+					
+					let data = await response.json();
+					localStorage.setItem('token', data.access_token)
+					return true;
+				} catch (error) {
+					console.log(error);
+					return false;
+				}
+			},
+
 			getProfile: async () => {
 				let token = localStorage.getItem('token');
 				try {
@@ -50,7 +72,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						method: 'GET',
 						headers: {
 							'content-type': 'application/json',
-							'authorization': `bearer ${token}`
+							'authorization': `Bearer ${token}`
 						}
 					})
 					let data = await response.json();

@@ -40,6 +40,26 @@ def login():
     access_token = create_access_token(identity=email)
     return jsonify(access_token=access_token)
 
+@api.route("/signup", methods=["POST"])
+def signup():
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+
+    if not email or not password:
+        return jsonify({"msg": "Missing required fields"}), 400
+
+    user = User.query.filter_by(email = email).first()
+
+    if user:
+        return jsonify({"msg": "This email already exists"}), 409
+
+    new_user = User(email=email, password=password, is_active=True)
+    db.session.add(new_user)
+    db.session.commit()
+
+    access_token = create_access_token(identity=email)
+    return jsonify(access_token=access_token), 201
+
 # Protect a route with jwt_required, which will kick out requests
 # without a valid JWT present.
 @api.route("/private", methods=["GET"])
