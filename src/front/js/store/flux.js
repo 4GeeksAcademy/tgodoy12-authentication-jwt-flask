@@ -21,6 +21,47 @@ const getState = ({ getStore, getActions, setStore }) => {
 				getActions().changeColor(0, "green");
 			},
 
+			login: async (email, password) => {
+				try {
+					let response = await fetch('https://opulent-pancake-9rxpj9pgq4jc7qgp-3001.app.github.dev/api/login', {
+						method: 'POST',
+						headers: {
+							'content-type': 'application/json'
+						},
+						body: JSON.stringify({
+							'email': email,
+							'password': password
+						})
+					})
+					
+					let data = await response.json();
+					localStorage.setItem('token', data.access_token)
+					return true;
+				} catch (error) {
+					console.log(error);
+					return false;
+				}
+			},
+
+			getProfile: async () => {
+				let token = localStorage.getItem('token');
+				try {
+					let response = await fetch('https://opulent-pancake-9rxpj9pgq4jc7qgp-3001.app.github.dev/api/private', {
+						method: 'GET',
+						headers: {
+							'content-type': 'application/json',
+							'authorization': `bearer ${token}`
+						}
+					})
+					let data = await response.json();
+					console.log(data)
+					return true;
+				} catch (error) {
+					console.log(error);
+					return false;
+				}
+			},
+
 			getMessage: async () => {
 				try{
 					// fetching data from the backend
