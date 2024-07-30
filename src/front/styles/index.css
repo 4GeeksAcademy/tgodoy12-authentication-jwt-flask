@@ -1,6 +1,9 @@
 /* 
     General Styles used on every website (Don't Repeat Yourself)
 */
+body {
+    font-family: 'Roboto', sans-serif;
+}
 .bgimg {
     background-size: cover;
     background-position: center;
@@ -11,4 +14,11 @@
     color: white;
     text-shadow: 2px 2px 20px rgba(49, 49, 49, 0.5);
     font-size: 4rem;
+}
+.user-info {
+    color: white;
+    text-shadow: 2px 2px 20px rgba(49, 49, 49, 0.5);
+}
+.btn-outline-light:hover {
+    color: violet; /* Cambia a un color violeta */
 }

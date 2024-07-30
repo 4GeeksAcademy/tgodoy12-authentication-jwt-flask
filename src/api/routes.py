@@ -67,7 +67,13 @@ def signup():
 def private():
     # Access the identity of the current user with get_jwt_identity
     current_user = get_jwt_identity()
-    return jsonify(logged_in_as=current_user), 200
+
+    user = User.query.filter_by(email=current_user).first()
+    
+    if user is None:
+        return jsonify({"msg": "User not found"}), 404
+
+    return jsonify(user.serialize()), 200
 
 @api.route("/valid-token", methods=["GET"])
 @jwt_required()
