@@ -1,17 +1,17 @@
 import React, { useContext } from "react";
 
 import "../../styles/home.css";
-import LoginForm from "../component/loginForm.jsx";
 
 export const Home = () => {
 	
 
 	return (
-		<div className="container mt-5">
-			<div className="text-center">
-				<h1>Acceder</h1>
+		<div className="d-flex justify-content-center align-items-center vh-100">
+			<div>
+				<h1 className="title text-white">Hello,</h1>
+				<h1 className="title text-white fw-bold">welcome!</h1>
 			</div>
-			<LoginForm/>
+			
 
 		</div>
 	);

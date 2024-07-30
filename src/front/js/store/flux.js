@@ -2,18 +2,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
+			authentication: false,
+			profileData: {}
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -76,6 +66,25 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					})
 					let data = await response.json();
+					console.log(data)
+					return true;
+				} catch (error) {
+					console.log(error);
+					return false;
+				}
+			},
+			validateToken: async () => {
+				let token = localStorage.getItem('token');
+				try {
+					let response = await fetch('https://opulent-pancake-9rxpj9pgq4jc7qgp-3001.app.github.dev/api/private', {
+						method: 'GET',
+						headers: {
+							'content-type': 'application/json',
+							'authorization': `Bearer ${token}`
+						}
+					})
+					let data = await response.json();
+					setStore({ authentication: data.logged }) //setea la propiedad logged definida en routes.py
 					console.log(data)
 					return true;
 				} catch (error) {

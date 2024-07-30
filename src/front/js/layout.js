@@ -13,6 +13,7 @@ import { Footer } from "./component/footer";
 import { Login } from "./pages/login.jsx";
 import { Profile } from "./pages/profile.jsx";
 import { SignUp } from "./pages/signUp.jsx";
+import background from "../img/bgimage.jpg";
 
 //create your first component
 const Layout = () => {
@@ -23,7 +24,7 @@ const Layout = () => {
     if(!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
 
     return (
-        <div>
+        <div className="bgimg min-vh-100 d-flex flex-column" style={{ backgroundImage: `url(${background})`, height: "100%"}}>
             <BrowserRouter basename={basename}>
                 <ScrollToTop>
                     <Navbar />

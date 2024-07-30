@@ -40,23 +40,19 @@ const LoginForm = () => {
 
             <form onSubmit={handleLogin}>
                 <div className="mb-3">
-                    <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
+                    <label htmlFor="exampleInputEmail1" className="form-label text-white">Email address</label>
                     <input type="email" className="form-control" id="exampleInputEmail1" onChange={(e) => setEmail(e.target.value)} aria-describedby="emailHelp"/>
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
+                    <label htmlFor="exampleInputPassword1" className="form-label text-white">Password</label>
                     <input type="password" className="form-control" id="exampleInputPassword1" onChange={(e) => setPassword(e.target.value)}/>
                 </div>
-                <div className="d-flex">
-                    <div className="me-3">
-                        <button type="submit" className="btn btn-primary">Submit</button>
-                    </div>
-
-                    <div>
-                        <Link to="/signup"><button className="btn btn-primary">Sign up</button></Link>    
-                    </div>
-                    
+                
+                <div className="me-3">
+                    <button type="submit" className="btn btn-outline-light me-3">Submit</button>
                 </div>
+                    
+                
                 
                 
                 

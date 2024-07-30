@@ -1,4 +1,14 @@
 /* 
     General Styles used on every website (Don't Repeat Yourself)
 */
+.bgimg {
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+  }
 
+.title {
+    color: white;
+    text-shadow: 2px 2px 20px rgba(49, 49, 49, 0.5);
+    font-size: 4rem;
+}

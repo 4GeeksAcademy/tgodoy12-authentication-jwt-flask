@@ -38,7 +38,7 @@ def login():
         return jsonify({"msg": "Bad username or password"}), 401
 
     access_token = create_access_token(identity=email)
-    return jsonify(access_token=access_token)
+    return jsonify({"access_token":access_token, "logged":True})
 
 @api.route("/signup", methods=["POST"])
 def signup():
@@ -58,7 +58,7 @@ def signup():
     db.session.commit()
 
     access_token = create_access_token(identity=email)
-    return jsonify(access_token=access_token), 201
+    return jsonify({"access_token":access_token, "logged":True}), 201
 
 # Protect a route with jwt_required, which will kick out requests
 # without a valid JWT present.
@@ -68,3 +68,15 @@ def private():
     # Access the identity of the current user with get_jwt_identity
     current_user = get_jwt_identity()
     return jsonify(logged_in_as=current_user), 200
+
+@api.route("/valid-token", methods=["GET"])
+@jwt_required()
+def valid_token():
+    # Validate the identity of the current user
+    current_user = get_jwt_identity()
+    user_logged = User.query.filter_by(email = current_user).first()
+
+    if user_logged is None:
+        return jsonify(logged=False), 409
+
+    return jsonify(logged=True), 200
