@@ -62,9 +62,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					})
 					let data = await response.json();
-					setStore({ profileData: data }); // Almacenar la información del perfil en el estado global
-					console.log(data);
-					return true;
+					if (response.ok) {
+						setStore({ profileData: data });
+						console.log(data);
+						return true;
+					} else {
+						console.log("msg:", data.msg);
+						return false;
+					}
 				} catch (error) {
 					console.log(error);
 					return false;
