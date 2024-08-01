@@ -6,6 +6,7 @@ from api.models import db, User
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from datetime import timedelta
 
 api = Blueprint('api', __name__)
 
@@ -37,7 +38,7 @@ def login():
     if email != user.email or password != user.password:
         return jsonify({"msg": "Bad username or password"}), 401
 
-    access_token = create_access_token(identity=email)
+    access_token = create_access_token(identity=email, expires_delta=timedelta(hours=12))
     return jsonify({"access_token":access_token, "logged":True})
 
 @api.route("/signup", methods=["POST"])
@@ -86,3 +87,30 @@ def valid_token():
         return jsonify(logged=False), 409
 
     return jsonify(logged=True), 200
+
+@api.route("/update", methods=["PUT"])
+@jwt_required()
+def update_user():
+    current_user = get_jwt_identity()
+
+    user = User.query.filter_by(email = current_user).first()
+
+    if user is None:
+        return jsonify({ "msg": "user not found"}), 404
+    
+
+    name = request.json.get("name", user.name)
+    bio = request.json.get("bio", user.bio)
+    password = request.json.get("password", user.password)
+
+    # Actualiza los campos
+    user.name = name
+    user.bio = bio
+    user.password = password
+
+    print(user.serialize())
+    
+    db.session.add(user)
+    db.session.commit()
+
+    return jsonify({ "msg": "user updated successfully"}), 200

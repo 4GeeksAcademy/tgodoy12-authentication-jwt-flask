@@ -11,7 +11,7 @@ const LoginForm = () => {
     const { store, actions } = useContext(Context);
     const navigate = useNavigate();
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         
         //setea emptyFields en caso de no completar con los campos
@@ -25,7 +25,9 @@ const LoginForm = () => {
 
         //logged retorna true en caso de ser correctos los valores ingresados y 
         //se redirige a /profile (private page)
-        let logged = actions.login(email, password);
+        let logged = await actions.login(email, password);
+        console.log(logged);
+        
         if (logged) {
             navigate('/profile');
         }

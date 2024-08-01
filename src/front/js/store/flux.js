@@ -10,7 +10,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			
 			login: async (email, password) => {
 				try {
-					let response = await fetch('https://opulent-pancake-9rxpj9pgq4jc7qgp-3001.app.github.dev/api/login', {
+					let response = await fetch('https://urban-succotash-x74jvwjg945hg47-3001.app.github.dev/api/login', {
 						method: 'POST',
 						headers: {
 							'content-type': 'application/json'
@@ -22,6 +22,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					
 					let data = await response.json();
+					console.log(data);
 					localStorage.setItem('token', data.access_token)
 					setStore({ authentication: data.logged })
 					return data.logged; //devuelve la propiedad logged
@@ -32,7 +33,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			createAccount: async (email, password) => {
 				try {
-					let response = await fetch('https://opulent-pancake-9rxpj9pgq4jc7qgp-3001.app.github.dev/api/signup', {
+					let response = await fetch('https://urban-succotash-x74jvwjg945hg47-3001.app.github.dev/api/signup', {
 						method: 'POST',
 						headers: {
 							'content-type': 'application/json'
@@ -54,7 +55,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getProfile: async () => {
 				let token = localStorage.getItem('token');
 				try {
-					let response = await fetch('https://opulent-pancake-9rxpj9pgq4jc7qgp-3001.app.github.dev/api/private', {
+					let response = await fetch('https://urban-succotash-x74jvwjg945hg47-3001.app.github.dev/api/private', {
 						method: 'GET',
 						headers: {
 							'content-type': 'application/json',
@@ -78,7 +79,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			validateToken: async () => {
 				let token = localStorage.getItem('token');
 				try {
-					let response = await fetch('https://opulent-pancake-9rxpj9pgq4jc7qgp-3001.app.github.dev/api/valid-token', {
+					let response = await fetch('https://urban-succotash-x74jvwjg945hg47-3001.app.github.dev/api/valid-token', {
 						method: 'GET',
 						headers: {
 							'content-type': 'application/json',
@@ -95,6 +96,35 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return false;
 				}
 			},
+			updateProfile: async (name, bio, password) => {
+				let token = localStorage.getItem('token');
+				try {
+					let response = await fetch('https://urban-succotash-x74jvwjg945hg47-3001.app.github.dev/api/update', {
+						method: 'PUT',
+						headers: {
+							'content-type': 'application/json',
+							'authorization': `Bearer ${token}`
+						},
+						body: JSON.stringify({
+                            'name': name,
+                            'bio': bio,
+                            'password': password
+                        })
+					});
+					let data = await response.json();
+					if (response.ok) {
+						setStore({ profileData: data });
+						console.log(data);
+						return true;
+					} else {
+						console.log("msg:", data.msg);
+						return false;
+					}
+				} catch (error) {
+					console.log(error);
+				}
+			},
+
 			logout: () => {
 				localStorage.removeItem("token");
 				setStore({ authentication: false})

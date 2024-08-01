@@ -11,14 +11,14 @@ const SignupForm = () => {
     const { store, actions } = useContext(Context);
     const navigate = useNavigate();
 
-    const handleSingup = (e) => {
+    const handleSingup = async (e) => {
         e.preventDefault();
         if (!email || !password) {
             setEmptyFields("Email and password fields are required")
             return;
         }
         
-        let newAccount = actions.createAccount(email, password);
+        let newAccount = await actions.createAccount(email, password);
         if (newAccount) {
             navigate('/profile');
         }
