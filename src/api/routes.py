@@ -23,12 +23,14 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
-# Create a route to authenticate your users and return JWTs. The
-# create_access_token() function is used to actually generate the JWT.
+
 @api.route("/login", methods=["POST"])
 def login():
     email = request.json.get("email", None)
     password = request.json.get("password", None)
+
+    if not email or not password:
+        return jsonify({"msg": "Email and password are required"}), 400
 
     user = User.query.filter_by(email = email).first()
 
@@ -38,8 +40,8 @@ def login():
     if email != user.email or password != user.password:
         return jsonify({"msg": "Bad username or password"}), 401
 
-    access_token = create_access_token(identity=email, expires_delta=timedelta(hours=12))
-    return jsonify({"access_token":access_token, "logged":True})
+    access_token = create_access_token(identity=email, expires_delta=timedelta(hours=12), additional_claims={"token_type": "local"})
+    return jsonify({"access_token":access_token, "user":user.serialize()})
 
 @api.route("/signup", methods=["POST"])
 def signup():
@@ -59,34 +61,21 @@ def signup():
     db.session.commit()
 
     access_token = create_access_token(identity=email)
-    return jsonify({"access_token":access_token, "logged":True}), 201
+    return jsonify({"access_token":access_token, "user": new_user.serialize()}), 201
 
-# Protect a route with jwt_required, which will kick out requests
-# without a valid JWT present.
-@api.route("/private", methods=["GET"])
-@jwt_required()
-def private():
-    # Access the identity of the current user with get_jwt_identity
-    current_user = get_jwt_identity()
-
-    user = User.query.filter_by(email=current_user).first()
-    
-    if user is None:
-        return jsonify({"msg": "User not found"}), 404
-
-    return jsonify(user.serialize()), 200
 
 @api.route("/valid-token", methods=["GET"])
 @jwt_required()
 def valid_token():
+    
     # Validate the identity of the current user
     current_user = get_jwt_identity()
-    user_logged = User.query.filter_by(email = current_user).first()
+    user = User.query.filter_by(email = current_user).first()
 
-    if user_logged is None:
-        return jsonify(logged=False), 409
+    if user is None:
+        return jsonify(user=None), 409
 
-    return jsonify(logged=True), 200
+    return jsonify(user.serialize()), 200
 
 @api.route("/update", methods=["PUT"])
 @jwt_required()

@@ -11,7 +11,7 @@ const SignupForm = () => {
     const { store, actions } = useContext(Context);
     const navigate = useNavigate();
 
-    const handleSingup = async (e) => {
+    const handleSignup = async (e) => {
         e.preventDefault();
         if (!email || !password) {
             setEmptyFields("Email and password fields are required")
@@ -29,7 +29,7 @@ const SignupForm = () => {
             {emptyFields && (<div className="alert alert-danger" role="alert">
                     {emptyFields}
             </div>)}
-            <form onSubmit={handleSingup}>
+            <form onSubmit={handleSignup}>
                 <div className="mb-3">
                     <label htmlFor="exampleInputEmail1" className="form-label text-white">Email address</label>
                     <input type="email" className="form-control" id="exampleInputEmail1" onChange={(e) => setEmail(e.target.value)} aria-describedby="emailHelp"/>

@@ -3,22 +3,17 @@ import { Context } from "../store/appContext";
 
 export const Profile = () => {
     const { store, actions } = useContext(Context);
-    const [name, setName] = useState(store.profileData.name || "");
-    const [bio, setBio] = useState(store.profileData.bio || "");
-
+    // const [name, setName] = useState(store.profileData.name || "");
+    // const [bio, setBio] = useState(store.profileData.bio || "");
+ 
     useEffect(() => {
-        actions.getProfile();
         
-    }, []);
+        console.log(store.user)
+    }, [store.user]);
 
-    useEffect(() => {
-        setName(store.profileData.name || "");
-        setBio(store.profileData.bio || "");
-    }, [store.profileData]);
 
-    const handleUpdateProfile = () => {
-        actions.updateProfile(name, bio);
-    };
+    console.log(store.user);
+    
 
     return(
         <div className="container mt-5 text-center">
@@ -28,34 +23,8 @@ export const Profile = () => {
             </div>
                 {/* quier que la informacion del user se muestre aca */}
                 
-                <p className="user-info">Email: {store.profileData.email}</p>
-                {store.profileData.name == null ? (<div>
-                    <label>
-                        Name:
-                        <input 
-                            type="text" 
-                            value={name} 
-                            onChange={(e) => setName(e.target.value)} 
-                        />
-                    </label>
-                    <button onClick={handleUpdateProfile}>Update Profile</button>
-                </div>) :
-                (<p className="user-info">{store.profileData.name}</p>)
-                }
-                
-                {store.profileData.bio == null ? (<div>
-                    <label>
-                        Bio:
-                        <input 
-                            type="text" 
-                            value={bio} 
-                            onChange={(e) => setBio(e.target.value)} 
-                        />
-                    </label>
-                    <button onClick={handleUpdateProfile}>Update Profile</button>
-                </div> 
-                ) : (<p className="user-info">{store.profileData.bio}</p>)}
-                
+            <p className="user-info">Email: {store.user.email}</p>
+          
                 
                 
         </div>
